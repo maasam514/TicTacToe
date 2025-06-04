@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Represents a Tic-Tac-Toe board.
@@ -174,4 +175,100 @@ class Board
         return sb.toString();
     }
 
+    /**
+     * Converts a string input (1-9) to a corresponding Move object representing a cell on the board.
+     *
+     * @param input the user input as a string, expected to be "1" through "9"
+     * @return a Move object corresponding to the board position, or null if input is invalid
+     */
+    public Move getMoveFromInput(String input) {
+        switch (input) {
+            case "1": return new Move(0, 0);
+            case "2": return new Move(0, 1);
+            case "3": return new Move(0, 2);
+            case "4": return new Move(1, 0);
+            case "5": return new Move(1, 1);
+            case "6": return new Move(1, 2);
+            case "7": return new Move(2, 0);
+            case "8": return new Move(2, 1);
+            case "9": return new Move(2, 2);
+            default: return null;
+        }
+    }
+
+    /**
+     * Checks if a given move is valid on the current board.
+     *
+     * @param move the move to validate
+     * @return true if the move is available, false otherwise
+     */
+    public boolean isValidMove(Move move) {
+        System.out.println("Checking move: " + move.getRow() + "," + move.getCol());
+        return getAvailableMoves().contains(move);
+    }
+
+    /**
+     * Starts an interactive Tic-Tac-Toe game between a human player (O) and the AI (X).
+     * The method handles user input, move validation, game state updates, and displays the board after each move.
+     * The game continues until there is a win, draw, or the user quits.
+     *
+     * Game flow:
+     * - The human player is prompted to enter a move (1-9) or 'quit' to exit.
+     * - The move is validated and played if valid.
+     * - The game checks for a win or draw after each move.
+     * - The AI (CPUPlayer) makes its move using alpha-beta pruning.
+     * - The board is displayed after each turn.
+     */
+    public void startGame() {
+        Scanner scanner = new Scanner(System.in);
+        CPUPlayer ai = new CPUPlayer(Mark.X);
+        Mark opponent = Mark.O;
+        Mark cpuPlayer = Mark.X;
+
+        while (true) {
+            System.out.println(this);
+
+            if (isGameOver()) {
+                if (evaluate(cpuPlayer) == 100) {
+                    System.out.println(cpuPlayer + " (AI) wins!");
+                } else if (evaluate(opponent) == -100) {
+                    System.out.println(opponent + " (Player) wins!");
+                } else {
+                    System.out.println("It's a draw!");
+                }
+                break;
+            }
+
+            System.out.print("Enter a move position [1 - 9] or 'quit' to exit: ");
+            String input = scanner.nextLine();
+
+            if (input.equals("quit")) {
+                System.out.println("Game exited.");
+                break;
+            }
+
+            Move playerMove = getMoveFromInput(input);
+            if (playerMove == null || !isValidMove(playerMove)) {
+                System.out.println("Invalid move. Try again.");
+                continue;
+            }
+            play(playerMove, opponent);
+
+            if (isGameOver()) {
+                System.out.println(this);
+                if (evaluate(opponent) == -100) {
+                    System.out.println(opponent + " (Player) wins!");
+                } else {
+                    System.out.println("It's a draw!");
+                }
+                break;
+            }
+
+            System.out.println("AI is thinking...");
+            Move aiMoveAB = ai.getNextMoveAB(this).getFirst();
+            play(aiMoveAB, cpuPlayer);
+            System.out.println("AI played: " + (aiMoveAB.getRow() * 3 + aiMoveAB.getCol() + 1));
+        }
+        scanner.close();
+    }
 }

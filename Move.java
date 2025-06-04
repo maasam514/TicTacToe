@@ -1,5 +1,7 @@
 /**
  * Represents a move on a board with a row and column.
+ *  @author Liza Benkadoum
+ *  @author Mohammadsam Karimi
  */
 class Move
 {
