@@ -1,31 +1,49 @@
 import java.util.ArrayList;
+/**
+ * Represents an AI player (CPU) for Tic-Tac-Toe using Minimax and Alpha-Beta pruning algorithms.
+ * The CPU always plays as the specified Mark (typically X).
+ *
+ * @author Liza Benkadoum
+ * @author Mohammadsam Karimi
+ */
 
-// IMPORTANT: Il ne faut pas changer la signature des méthodes
-// de cette classe, ni le nom de la classe.
-// Vous pouvez par contre ajouter d'autres méthodes (ça devrait 
-// être le cas)
 class CPUPlayer
 {
 
-    // Contient le nombre de noeuds visités (le nombre
-    // d'appel à la fonction MinMax ou Alpha Beta)
-    // Normalement, la variable devrait être incrémentée
-    // au début de votre MinMax ou Alpha Beta.
+    /**
+     * Stores the number of nodes explored during the last Minimax or Alpha-Beta search.
+     * This variable should be incremented at the start of each recursive call.
+     */
     private int numExploredNodes;
+
+    /**
+     * The Mark used by the CPU player (usually X).
+     */
     private final Mark cpuPlayer = Mark.X;
 
-    // Le constructeur reçoit en paramètre le
-    // joueur MAX (X ou O)
+    /**
+     * Constructs a CPUPlayer with the specified Mark.
+     *
+     * @param cpu the Mark representing the CPU player (X or O)
+     */
     public CPUPlayer(Mark cpu) { }
 
-    // Ne pas changer cette méthode
+    /**
+     * Returns the number of nodes explored in the last search.
+     *
+     * @return the number of explored nodes
+     */
     public int getNumOfExploredNodes() {
         return numExploredNodes;
     }
 
-    // Retourne la liste des coups possibles.  Cette liste contient
-    // plusieurs coups possibles si et seuleument si plusieurs coups
-    // ont le même score.
+    /**
+     * Returns a list of the best possible moves using the Minimax algorithm.
+     * If multiple moves have the same best score, all are included.
+     *
+     * @param board the current game board
+     * @return a list of best moves
+     */
     public ArrayList<Move> getNextMoveMinMax(Board board) {
         numExploredNodes = 0;
         ArrayList<Move> bestMoves = new ArrayList<>();
@@ -46,6 +64,15 @@ class CPUPlayer
         return bestMoves;
     }
 
+    /**
+     * Alpha-Beta pruning algorithm to evaluate the board.
+     *
+     * @param board the current game board
+     * @param isMaximizing true if maximizing player, false otherwise
+     * @param alpha the current alpha value
+     * @param beta the current beta value
+     * @return the evaluated score for the board
+     */
     private int alphabeta(Board board, boolean isMaximizing, int alpha, int beta) {
         if (board.hasWinner(Mark.X)) return 100;
         if (board.hasWinner(Mark.O)) return -100;
@@ -78,6 +105,13 @@ class CPUPlayer
         }
     }
 
+    /**
+     * Minimax algorithm to evaluate the board.
+     *
+     * @param board the current game board
+     * @param isMaximizing true if maximizing player, false otherwise
+     * @return the evaluated score for the board
+     */
     private int minimax(Board board, boolean isMaximizing) {
         if (board.hasWinner(Mark.X)) return 100;
         if (board.hasWinner(Mark.O)) return -100;
@@ -106,9 +140,13 @@ class CPUPlayer
         }
     }
 
-    // Retourne la liste des coups possibles.  Cette liste contient
-    // plusieurs coups possibles si et seuleument si plusieurs coups
-    // ont le même score.
+    /**
+     * Returns a list of the best possible moves using the Alpha-Beta pruning algorithm.
+     * If multiple moves have the same best score, all are included.
+     *
+     * @param board the current game board
+     * @return a list of best moves
+     */
     public ArrayList<Move> getNextMoveAB(Board board){
         numExploredNodes = 0;
         ArrayList<Move> bestMoves = new ArrayList<>();

@@ -1,15 +1,18 @@
 import java.util.ArrayList;
 
-// IMPORTANT: Il ne faut pas changer la signature des méthodes
-// de cette classe, ni le nom de la classe.
-// Vous pouvez par contre ajouter d'autres méthodes (ça devrait 
-// être le cas)
+/**
+ * Represents a Tic-Tac-Toe board.
+ * @author Liza Benkadoum
+ * @author Mohammadsam Karimi
+ */
 class Board
 {
 
     private Mark[][] board;
 
-    // Ne pas changer la signature de cette méthode
+    /**
+     * Constructs a new empty 3x3 board.
+     */
     public Board() {
         board = new Mark[3][3];
         for (int i = 0; i < 3; i++) {
@@ -19,20 +22,25 @@ class Board
         }
     }
 
-    // Place la pièce 'mark' sur le plateau, à la
-    // position spécifiée dans Move
-    //
-    // Ne pas changer la signature de cette méthode
+    /**
+     * Places the specified mark on the board at the position specified by the move.
+     *
+     * @param m the move specifying the position
+     * @param mark the mark to place (X or O)
+     */
     public void play(Move m, Mark mark){
         this.board[m.getRow()][m.getCol()] = mark;
     }
 
-    // retourne  100 pour une victoire
-    //          -100 pour une défaite
-    //           0   pour un match nul
-    // Ne pas changer la signature de cette méthode
+    /**
+     * Evaluates the board for the specified mark.
+     *
+     * @param mark the mark to evaluate for (X or O)
+     * @return 100 for a win, -100 for a loss, 0 for a draw, 2 otherwise
+     */
     public int evaluate(Mark mark){
         int temp =0;
+        //colones
         for (int i = 0; i < 3; i++) {
             temp=0;
             for (int j = 0; j < 3; j++) {
@@ -49,6 +57,7 @@ class Board
                 }
             }
         }
+        //lignes
         for (int i = 0; i < 3; i++) {
             temp=0;
             for (int j = 0; j < 3; j++) {
@@ -65,6 +74,7 @@ class Board
                 }
             }
         }
+        //diagonales
         if (board[0][0]==Mark.X &&board[1][1]== Mark.X &&board[2][2]==Mark.X
                 ||board[0][2]==Mark.X && board[1][1]==Mark.X && board[2][0]==Mark.X)
         {
@@ -79,10 +89,21 @@ class Board
         return 2;
     }
 
+    /**
+     * Checks if the game is over (win, loss, or draw).
+     *
+     * @return true if the game is over, false otherwise
+     */
     public Boolean isGameOver(){
         return evaluate(Mark.X) == 100 || evaluate(Mark.O) == -100 || getAvailableMoves().isEmpty();
     }
 
+    /**
+     * Checks if the specified player has won the game.
+     *
+     * @param player the player to check (X or O)
+     * @return true if the player has won, false otherwise
+     */
     public boolean hasWinner(Mark player) {
         for (int row = 0; row < 3; row++) {
             if (board[row][0] == player && board[row][1] == player && board[row][2] == player) {
@@ -103,6 +124,11 @@ class Board
         return false;
     }
 
+    /**
+     * Returns a list of all available moves on the board.
+     *
+     * @return an ArrayList of available moves
+     */
     public ArrayList<Move> getAvailableMoves() {
         ArrayList<Move> availableMoves = new ArrayList<>();
 
@@ -116,6 +142,11 @@ class Board
         return availableMoves;
     }
 
+    /**
+     * Creates a deep copy of the board.
+     *
+     * @return a new Board object with the same state
+     */
     public Board clone(){
         Board cpyBoard = new Board();
         for (int i = 0; i < 3; i++) {
@@ -126,6 +157,11 @@ class Board
         return cpyBoard;
     }
 
+    /**
+     * Returns a string representation of the board.
+     *
+     * @return the board as a string
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
